@@ -1,50 +1,119 @@
-# Welcome to your Expo app 👋
+## Project Setup
+- npx create-expo-app@latest ./
+- npx expo start
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+- app.json - newArchEnabled => allow bridgeless communication
 
-## Get started
+- fabric for rendering, jsi for direct sync bw js and native code
 
-1. Install dependencies
+- reset the project to scratch by following commands
 
-   ```bash
-   npm install
-   ```
+- npm run reset-project
 
-2. Start the app
+- npx expo start
 
-   ```bash
-    npx expo start
-   ```
+## Setup Routes
 
-In the output, you'll find options to open the app in a
+![img.png](img.png)
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- **plugin** - modern react snippets
+- created sign-in.tsx file
+- rnfe => react native functional comp with exports
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+```aiignore
+const Property = () => {
+    const { id } = useLocalSearchParams()
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+    return (
+        <View>
+            <Text>Property {id}</Text>
+        </View>
+    )
+}
 ```
+- created explore, tabs, profile, properties tabs
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
-## Learn more
+## Setup Nativewind
+- Its a styling library
 
-To learn more about developing your project with Expo, look at the following resources:
+## Setup native wind
+- go through official docs
+- changes that I did are
+```aiignore
+tailwind.config.js file
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+//added  "./components/**/*.{js,jsx,ts,tsx}"
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+    // NOTE: Update this to include the paths to all of your component files.
+    content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
+    presets: [require("nativewind/preset")],
+    theme: {
+        extend: {},
+    },
+    plugins: [],
+}
 
-## Join the community
+- In metro.config.js file
+- changed module.exports { input: './app/globals.css' }
+- imported import "./globals.css" in _layout.tsx for importing native wind into the application
 
-Join our community of developers creating universal apps.
+```
+## Setup fonts and assets
+- added assets and constants folder
+- added fonts to app.json
+- in app.json changed expo flash screen props
+- in _layout.tsx added fonts and if fonts are loaded hide splash screen logic
+- tailwind.config.js
+```aiignore
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+    // NOTE: Update this to include the paths to all of your component files.
+    content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
+    presets: [require("nativewind/preset")],
+    theme: {
+        extend: {
+            fontFamily: {
+                "rubik-bold": ["Rubik-Bold", "sans-serif"],
+                "rubik-extrabold": ["Rubik-ExtraBold", "sans-serif"],
+                "rubik-medium": ["Rubik-Medium", "sans-serif"],
+                "rubik-semibold": ["Rubik-SemiBold", "sans-serif"],
+                "rubik-light": ["Rubik-Light", "sans-serif"],
+            }
+        },
+        colors:{
+            "primary":{
+                100: '#0061FF0A',
+                200: '#0061FF0A',
+                300: '#0061FF',
+            },
+            accent: {
+                100: '#FBFBFD'
+            },
+            black: {
+                DEFAULT: '#000000',
+                100: '#8C8E98',
+                200: '#666876',
+                300: '#191d31',
+            },
+            danger: '#F75555'
+        }
+    },
+    plugins: [],
+}
+```
+> issue with loading fonts due to mismatched path
+- Changed fonts path accordingly
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+> TS2307: Cannot find module @/ assets/ icons/ star. png or its corresponding type declarations.
+- Steps to fix
+- create image.t.ds
+- declared types for all file formats
+
+## Sign in page
+> Remove (root)/(tabs)/index from screen
+- in _layout.tsx 
+- return <Stack screenOptions={{headerShown: false}}/>;
+- **SafeAreaView** - Ensures that all texts abides within the border of the screen
+- 
